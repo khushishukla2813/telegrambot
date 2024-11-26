@@ -143,4 +143,4 @@ def main():
 
 # The application will automatically run and handle the event loop when executed
 if __name__ == "__main__":
-    main()  # Run the bot application
+    #main()  # Run the bot application
