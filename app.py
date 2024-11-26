@@ -5,7 +5,8 @@ from datetime import datetime, timedelta
 import time
 
 app = Flask(__name__)
-
+app.config['DEBUG'] = False
+app.config['ENV'] = 'production'
 # File path for storing user data
 DATA_FILE = "C:/Users/ghost/Downloads/steven/data.json"
 
