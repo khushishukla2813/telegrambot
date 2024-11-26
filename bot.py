@@ -1,12 +1,18 @@
 import json
+import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
 import datetime
+import os
 
-# File path for storing user data
-DATA_FILE = "C:/Users/ghost/Downloads/steven/data.json"
-app.config['DEBUG'] = False
-app.config['ENV'] = 'production'
+# Logging setup
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# File path for storing user data (can be modified in prod)
+DATA_FILE = os.getenv("DATA_FILE", "data.json")  # Using environment variable
+BOT_TOKEN = os.getenv("BOT_TOKEN")  # Store token in an environment variable
 
 # Load JSON data
 def load_data():
@@ -27,7 +33,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id
     data = load_data()
 
-    # Check if the user is already in the database
     for record in data["users"]:
         if record["whatsapp"] == context.user_data.get("whatsapp"):
             record["chat_id"] = chat_id  # Save chat_id for future notifications
@@ -44,7 +49,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 return
 
-    # If the user does not have a profile, show the account creation message
+    # If user doesn't have profile, show account creation message
     await update.message.reply_text(
         f"👋 Hi {user.first_name}, please create your account.",
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Create Account", callback_data="create_account")]]),
@@ -92,7 +97,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "whatsapp": context.user_data["whatsapp"],
             "chat_id": chat_id,
             "status": "pending",
-            "remaining_days": 0,  # Default days set to 0
+            "remaining_days": 0,
             "last_verified": str(datetime.date.today())
         })
         save_data(data)
@@ -107,15 +112,12 @@ async def renew_membership(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = load_data()
     chat_id = update.message.chat_id
 
-    # Find user in database
     for user in data["users"]:
         if user.get("chat_id") == chat_id and user["status"] == "verified":
-            # Extend membership days
-            added_days = 30  # Example renewal days
+            added_days = 30
             user["remaining_days"] += added_days
             save_data(data)
 
-            # Send renewal confirmation
             await update.message.reply_text(
                 f"🌟 Membership Renewed!\n\n"
                 f"A big thank-you for your renewal! 💖\n"
@@ -124,23 +126,24 @@ async def renew_membership(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return
 
-    # If user is not found or not verified
     await update.message.reply_text("❌ You do not have an active membership to renew. Please contact support.")
+
+# Error handler
+async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.error(f"An error occurred: {context.error}")
 
 # Main function to run the bot
 def main():
-    # Create the application
-    application = Application.builder().token("7843100909:AAHkCnPi6vmW_4Er6-XCh9ZjlzpPp9m55HU").build()
+    application = Application.builder().token(BOT_TOKEN).build()
 
-    # Register handlers
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("renew", renew_membership))  # Add renew command
+    application.add_handler(CommandHandler("renew", renew_membership))
     application.add_handler(CallbackQueryHandler(handle_callback))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    # Start the bot
+    application.add_error_handler(error_handler)
+
     application.run_polling()
 
-# The application will automatically run and handle the event loop when executed
 if __name__ == "__main__":
-    main()  # Run the bot application
+    main()
