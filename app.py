@@ -7,8 +7,9 @@ import time
 app = Flask(__name__)
 app.config['DEBUG'] = False
 app.config['ENV'] = 'production'
-# File path for storing user data
-DATA_FILE = "C:/Users/ghost/Downloads/steven/data.json"
+
+# File path for storing user data (adjusted for relative path)
+DATA_FILE = "data.json"  # Use a relative path to ensure it works on Railway
 
 # Telegram bot token
 BOT_TOKEN = "7843100909:AAHkCnPi6vmW_4Er6-XCh9ZjlzpPp9m55HU"
@@ -129,4 +130,4 @@ def renew_user():
     return redirect(url_for("admin_panel"))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)  # Ensure debug mode is off for production
