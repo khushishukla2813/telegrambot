@@ -5,6 +5,8 @@ import datetime
 
 # File path for storing user data
 DATA_FILE = "C:/Users/ghost/Downloads/steven/data.json"
+app.config['DEBUG'] = False
+app.config['ENV'] = 'production'
 
 # Load JSON data
 def load_data():
