@@ -6,7 +6,7 @@ import time
 
 app = Flask(__name__)
 app.config['DEBUG'] = False
-app.config['ENV'] = 'production'
+
 
 # File path for storing user data (adjusted for relative path)
 DATA_FILE = "data.json"  # Use a relative path to ensure it works on Railway
