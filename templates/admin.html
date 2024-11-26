@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .user-table {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Admin Panel</h1>
+        
+        <!-- Form to send link to verified users -->
+        <h3>Send Link to Verified Users</h3>
+        <form action="/send_link" method="POST">
+            <div class="form-group">
+                <label for="link">Link:</label>
+                <input type="text" class="form-control" name="link" id="link" required placeholder="Enter the link to send">
+            </div>
+            <button type="submit" class="btn btn-primary">Send Link</button>
+        </form>
+
+        <!-- Table of users -->
+        <div class="user-table">
+            <h3 class="mt-4">Users</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>WhatsApp</th>
+                        <th>Status</th>
+                        <th>Remaining Days</th>
+                        <th>Last Verified</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.whatsapp }}</td>
+                        <td>{{ user.status }}</td>
+                        <td>{{ user.remaining_days }}</td>
+                        <td>{{ user.last_verified }}</td>
+                        <td>
+                            <!-- Update status form -->
+                            <form action="/update_status" method="POST" class="d-inline">
+                                <input type="hidden" name="whatsapp" value="{{ user.whatsapp }}">
+                                <select name="status" class="form-control-sm">
+                                    <option value="verified" {% if user.status == 'verified' %}selected{% endif %}>Verified</option>
+                                    <option value="rejected" {% if user.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-warning">Update Status</button>
+                            </form>
+
+                            <!-- Delete user form -->
+                            <form action="/delete_user" method="POST" class="d-inline">
+                                <input type="hidden" name="whatsapp" value="{{ user.whatsapp }}">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete User</button>
+                            </form>
+
+                            <!-- Renew user form -->
+                            <form action="/renew_user" method="POST" class="d-inline">
+                                <input type="hidden" name="whatsapp" value="{{ user.whatsapp }}">
+                                <input type="number" name="renewal_days" placeholder="Days to renew" class="form-control-sm d-inline" required>
+                                <button type="submit" class="btn btn-sm btn-success">Renew</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

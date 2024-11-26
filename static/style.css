@@ -1,0 +1,93 @@
+/* General Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    color: #343a40;
+}
+
+/* Container for the admin panel */
+.container {
+    margin-top: 50px;
+}
+
+/* Card styles */
+.card {
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Card header styles */
+.card-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 5px 5px 0 0;
+}
+
+/* Button styles */
+.btn {
+    margin-right: 5px;
+    font-size: 0.9em;
+    padding: 8px 12px;
+}
+
+/* Small button styles */
+.btn-sm {
+    padding: 5px 10px;
+}
+
+/* Styling for success buttons */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Styling for danger buttons */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Styling for secondary buttons */
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Status badge styles */
+.badge {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    border-radius: 20px;
+}
+
+/* Verified status badge */
+.badge.bg-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+/* Pending status badge */
+.badge.bg-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* Rejected status badge */
+.badge.bg-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Table hover effect */
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Table header styles */
+.table th {
+    background-color: #343a40;
+    color: #ffffff;
+}
