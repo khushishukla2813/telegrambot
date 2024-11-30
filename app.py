@@ -95,7 +95,7 @@ def send_link():
 
     # Notify all verified users
     for user in data["users"]:
-        if user["status"] == "verified" and "chat_id" in user:
+        if user["status"] == "verified" and "chat_id" in user and user["remaining_days"]>0:
             notify_user(
                 user.get("chat_id"),
                 f"💫 Jackpot alert! 🌟 Your coins are waiting—collect them now! 🪙\n\n{link}"
